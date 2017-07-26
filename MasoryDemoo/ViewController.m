@@ -48,6 +48,21 @@
      
      问题3：
      - (void)updateConstraints方法是用来更新view约束的，它有一个常见的使用场景——批量更新约束。比如你的多个约束是由多个不同的property决定，每次设置property都会直接更新局部约束。这样效率不高。不如直接override- (void)updateConstraints方法，在方面里面对property进行判断，每次设置property的时候调用一下- (void)setNeedsUpdateConstraints。
+    
+     multipler属性表示约束值为约束对象的乘因数, dividedBy属性表示约束值为约束对象的除因数，可用于设置view的宽高比
+     
+     
+     
+     动画属性讲解: http://www.jianshu.com/p/1d1a1165bb04
+       1.setNeedsLayout:告知页面需要更新，但是不会立刻开始更新，执行后立刻调用layoutSubViews
+       2.layoutIfNeed:告知页面布局立刻更新。所以一般都会和setNeedsLayout一起使用。如果希望立刻生成新的frame需要调用此方法。利用这点
+         一般布局动画可以在更新布局后直接使用这个方法让动画生效。
+       3. layoutSubViews:系统重写布局。
+       4.setNeedUpdateConstraints:告知需要更新约束，但是不会立刻开始
+       5.updateConstraints:系统更新约束。
+       6 updateConstraintsIfNeeded 立即更新约束,以执行动态变化。
+     
+     
      */
     
     UIButton *testButton = [[UIButton alloc] init];
@@ -89,12 +104,16 @@
      mas_updateConstraints：更新
      */
     //第一种方式 通过设置优先级
-    [_testLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(200, 200)).priority(300);
+    [self.testLabel setNeedsLayout];
+    [UIView animateWithDuration:5 animations:^{
+        
+        [_testLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(200, 200)).priority(300);
+        }];
+        [self.testLabel layoutIfNeeded];
     }];
-    
     //第二种方式：
-    [self changeConstaints];
+    //[self changeConstaints];
     
 }
 
@@ -103,8 +122,14 @@
 -(void)changeConstaints
 {
     [self.constranit uninstall];
-    [self.testLabel makeConstraints:^(MASConstraintMaker *make) {
-        self.constranit =  make.size.mas_equalTo(CGSizeMake(200, 200));
+    [self.testLabel setNeedsLayout];
+    
+    [UIView animateWithDuration:5 animations:^{
+        [self.testLabel makeConstraints:^(MASConstraintMaker *make) {
+            self.constranit =  make.size.mas_equalTo(CGSizeMake(200, 200));
+        }];
+        [self.testLabel layoutIfNeeded];
+        
     }];
 }
 
