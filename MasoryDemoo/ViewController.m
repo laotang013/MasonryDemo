@@ -19,6 +19,8 @@
 @property(nonatomic,strong)UILabel *testLabel;
 /**1.定义一个约束*/
 @property(nonatomic,strong)MASConstraint *constranit;
+/**textFiled*/
+@property(nonatomic,strong)UITextField *textFiled;
 @end
 
 @implementation ViewController
@@ -216,11 +218,37 @@
     UIView *leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
     leftView.backgroundColor = [UIColor grayColor];
     textFiled.leftView = leftView;
-    
+    self.textFiled = textFiled;
     //编辑框的代理方法
     textFiled.delegate = self;
+    
+    [textFiled addTarget:self action:@selector(textFieldDidChange) forControlEvents:UIControlEventEditingChanged];
 }
 
+-(void)textFieldDidChange
+{
+    NSLog(@"dd");
+}
+//限定只能输入一定长度的字符
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    //string指此时输入的那个字符。textFiled表示此时正在输入的那个输入框 返回YES就是可以改变输入框的值。
+    NSLog(@"Range: %@  string:%@",NSStringFromRange(range),string);
+    NSString *toStr = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    NSLog(@"toStr: %@",toStr);
+    
+    //限制只能输入特定的字符
+//    NSCharacterSet *cs;
+//    cs = [[NSCharacterSet characterSetWithCharactersInString:NUMBERS]invertedSet];
+//    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs]componentsJoinedByString:@""]; //按cs分离出数组,数组按@""分离出字符串
+    
+    if (textField == self.textFiled) {
+        if ([toStr length] > 5) {
+            NSLog(@"长度超过了5");
+        }
+    }
+    return YES;
+}
 
 
 
