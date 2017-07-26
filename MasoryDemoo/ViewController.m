@@ -62,9 +62,12 @@
        5.updateConstraints:系统更新约束。
        6 updateConstraintsIfNeeded 立即更新约束,以执行动态变化。
      
-     
+     CGAffineTransform介绍:
+         CGAffineTransform是一个处理形变的类。其可以控制控件的平移、缩放、旋转,其坐标系统采用的是二维坐标系。
+         CGAffineTransformIdentity 特殊地transform属性默认值，可以在形变之后设置该值以还原到最初的状态。
      */
     
+   //设置约束的时候 注意事项： 1.先全部设置好约束，2.根据需要进行判断需要将哪个约束需要进行update
     UIButton *testButton = [[UIButton alloc] init];
     [testButton addTarget:self
                    action:@selector(onClick:)
@@ -76,7 +79,7 @@
     [testButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view.mas_centerX);
         make.top.equalTo(self.view.mas_top).offset(100);
-       make.size.mas_equalTo(CGSizeMake(100, 100));
+       make.size.mas_equalTo(CGSizeMake(50, 50));
     }];
     
     _testLabel = [[UILabel alloc] init];
@@ -88,7 +91,10 @@
        self.constranit =  make.size.equalTo(testButton).priority(250);
     }];
     
-    //设置约束的时候 注意事项： 1.先全部设置好约束，2.根据需要进行判断需要将哪个约束需要进行update 
+    
+    
+    //形变
+    
 
 }
 
@@ -104,16 +110,53 @@
      mas_updateConstraints：更新
      */
     //第一种方式 通过设置优先级
-    [self.testLabel setNeedsLayout];
+    /*[self.testLabel setNeedsLayout];
     [UIView animateWithDuration:5 animations:^{
         
         [_testLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(200, 200)).priority(300);
         }];
         [self.testLabel layoutIfNeeded];
-    }];
+    }];*/
     //第二种方式：
     //[self changeConstaints];
+    
+    [UIView animateWithDuration:2 animations:^{
+        //http://www.jianshu.com/p/ca7f9bc62429
+        //实现以初始位置为基准, 当tx为正值时,会向x轴正方向平移,反之,则向x轴负方向平移;当ty为正值时,会向y轴正方向平移,反之,则向y轴负方向平移
+       // _testLabel.transform = CGAffineTransformMakeTranslation(0, 200);
+      
+        //CGAffineTransformTranslate实现以一个已经存在的形变为基准,在x轴方向上平移x单位,在y轴方向上平移y单位
+        //_testLabel.transform = CGAffineTransformTranslate(_testLabel.transform, 0, 40);
+        
+        //缩放
+        // 当sx为正值时,会在x轴方向上缩放x倍,反之,则在缩放的基础上沿着竖直线翻转;当sy为正值时,会在y轴方向上缩放y倍,反之,则在缩放的基础上沿着水平线翻转
+       // _testLabel.transform = CGAffineTransformMakeScale(-2, 2);
+        
+        //CGAffineTransformScale实现以一个已经存在的形变为基准,在x轴方向上缩放x倍,在y轴方向上缩放y倍
+        //_testLabel.transform = CGAffineTransformScale(_testLabel.transform, 2, 1);
+        
+        //旋转
+        //实现以初始位置为基准,将坐标系统逆时针旋转angle弧度(弧度=π/180×角度,M_PI弧度代表180角度)
+        //注1: 当angle为正值时,逆时针旋转坐标系统,反之顺时针旋转坐标系统
+        //注2: 逆时针旋转坐标系统的表现形式为对控件进行顺时针旋转
+        //_testLabel.transform = CGAffineTransformMakeRotation(-M_PI);
+        
+        //CGAffineTransformRotate实现以一个已经存在的形变为基准,将坐标系统逆时针旋转angle弧度(弧度=π/180×角度,M_PI弧度代表180角度)
+        //_testLabel.transform = CGAffineTransformRotate(_testLabel.transform, M_PI);
+        
+        
+        
+        
+    }];
+    
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [UIView animateWithDuration:0.25 animations:^{
+//            _testLabel.transform = CGAffineTransformIdentity;
+//        }];
+//    });
+    
+    
     
 }
 
