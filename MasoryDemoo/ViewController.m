@@ -14,7 +14,7 @@
 #define screenHeight [UIScreen mainScreen].bounds.size.height
 #import "ViewController.h"
 
-@interface ViewController ()
+@interface ViewController ()<UITextFieldDelegate>
 /**label*/
 @property(nonatomic,strong)UILabel *testLabel;
 /**1.定义一个约束*/
@@ -30,6 +30,7 @@
      Masonry是基于NSLayoutConstraint等类的封装,也正是我们调用我们在调用- (NSArray *)mas_updateConstraints:(void(^)(MASConstraintMaker *))block的时候也只能更新NSLayoutConstraint中的@property CGFloat constant。
      */
     [self test];
+    [self test2];
 }
 -(void)test
 {
@@ -91,9 +92,9 @@
        self.constranit =  make.size.equalTo(testButton).priority(250);
     }];
     
-    
-    
-    //形变
+   
+
+ 
     
 
 }
@@ -121,41 +122,6 @@
     //第二种方式：
     //[self changeConstaints];
     
-    [UIView animateWithDuration:2 animations:^{
-        //http://www.jianshu.com/p/ca7f9bc62429
-        //实现以初始位置为基准, 当tx为正值时,会向x轴正方向平移,反之,则向x轴负方向平移;当ty为正值时,会向y轴正方向平移,反之,则向y轴负方向平移
-       // _testLabel.transform = CGAffineTransformMakeTranslation(0, 200);
-      
-        //CGAffineTransformTranslate实现以一个已经存在的形变为基准,在x轴方向上平移x单位,在y轴方向上平移y单位
-        //_testLabel.transform = CGAffineTransformTranslate(_testLabel.transform, 0, 40);
-        
-        //缩放
-        // 当sx为正值时,会在x轴方向上缩放x倍,反之,则在缩放的基础上沿着竖直线翻转;当sy为正值时,会在y轴方向上缩放y倍,反之,则在缩放的基础上沿着水平线翻转
-       // _testLabel.transform = CGAffineTransformMakeScale(-2, 2);
-        
-        //CGAffineTransformScale实现以一个已经存在的形变为基准,在x轴方向上缩放x倍,在y轴方向上缩放y倍
-        //_testLabel.transform = CGAffineTransformScale(_testLabel.transform, 2, 1);
-        
-        //旋转
-        //实现以初始位置为基准,将坐标系统逆时针旋转angle弧度(弧度=π/180×角度,M_PI弧度代表180角度)
-        //注1: 当angle为正值时,逆时针旋转坐标系统,反之顺时针旋转坐标系统
-        //注2: 逆时针旋转坐标系统的表现形式为对控件进行顺时针旋转
-        //_testLabel.transform = CGAffineTransformMakeRotation(-M_PI);
-        
-        //CGAffineTransformRotate实现以一个已经存在的形变为基准,将坐标系统逆时针旋转angle弧度(弧度=π/180×角度,M_PI弧度代表180角度)
-        //_testLabel.transform = CGAffineTransformRotate(_testLabel.transform, M_PI);
-        
-        
-        
-        
-    }];
-    
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [UIView animateWithDuration:0.25 animations:^{
-//            _testLabel.transform = CGAffineTransformIdentity;
-//        }];
-//    });
-    
     
     
 }
@@ -174,6 +140,94 @@
         [self.testLabel layoutIfNeeded];
         
     }];
+}
+
+-(void)test1
+{
+    //CGAffineTrans的实现
+    [UIView animateWithDuration:2 animations:^{
+        //http://www.jianshu.com/p/ca7f9bc62429
+        //实现以初始位置为基准, 当tx为正值时,会向x轴正方向平移,反之,则向x轴负方向平移;当ty为正值时,会向y轴正方向平移,反之,则向y轴负方向平移
+        // _testLabel.transform = CGAffineTransformMakeTranslation(0, 200);
+        
+        //CGAffineTransformTranslate实现以一个已经存在的形变为基准,在x轴方向上平移x单位,在y轴方向上平移y单位
+        //_testLabel.transform = CGAffineTransformTranslate(_testLabel.transform, 0, 40);
+        
+        //缩放
+        // 当sx为正值时,会在x轴方向上缩放x倍,反之,则在缩放的基础上沿着竖直线翻转;当sy为正值时,会在y轴方向上缩放y倍,反之,则在缩放的基础上沿着水平线翻转
+        // _testLabel.transform = CGAffineTransformMakeScale(-2, 2);
+        
+        //CGAffineTransformScale实现以一个已经存在的形变为基准,在x轴方向上缩放x倍,在y轴方向上缩放y倍
+        //_testLabel.transform = CGAffineTransformScale(_testLabel.transform, 2, 1);
+        
+        //旋转
+        //实现以初始位置为基准,将坐标系统逆时针旋转angle弧度(弧度=π/180×角度,M_PI弧度代表180角度)
+        //注1: 当angle为正值时,逆时针旋转坐标系统,反之顺时针旋转坐标系统
+        //注2: 逆时针旋转坐标系统的表现形式为对控件进行顺时针旋转
+        //_testLabel.transform = CGAffineTransformMakeRotation(-M_PI);
+        
+        //CGAffineTransformRotate实现以一个已经存在的形变为基准,将坐标系统逆时针旋转angle弧度(弧度=π/180×角度,M_PI弧度代表180角度)
+        //_testLabel.transform = CGAffineTransformRotate(_testLabel.transform, M_PI);
+        
+    }];
+    
+    //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    //        [UIView animateWithDuration:0.25 animations:^{
+    //            _testLabel.transform = CGAffineTransformIdentity;
+    //        }];
+    //    });
+    
+
+}
+
+-(void)test2
+{
+    //http://www.jianshu.com/p/4d38889500df
+    UITextField *textFiled = [[UITextField alloc]init];
+    [self.view addSubview:textFiled];
+    [textFiled makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.testLabel.bottom).offset(20);
+        make.left.equalTo(self.view).offset(10);
+        make.right.equalTo(-10);
+        make.height.equalTo(44);
+        
+    }];
+    
+    textFiled.borderStyle = UITextBorderStyleLine;
+    textFiled.placeholder = @"文本输入框";
+    //显示删除按钮的模式
+    textFiled.clearButtonMode = UITextFieldViewModeAlways;
+    //设置开始编辑时是否删除原有的内容
+    textFiled.clearsOnBeginEditing = YES;
+    //设置return键返回类型
+    textFiled.returnKeyType = UIReturnKeyDone;
+    //自定义键盘辅助视图
+    UIView *keyBoardView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
+    keyBoardView.backgroundColor = [UIColor orangeColor];
+    textFiled.inputAccessoryView = keyBoardView;
+    
+    //自定义键盘
+    UIView *keyView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 100)];
+    keyView.backgroundColor = [UIColor redColor];
+    textFiled.inputView = keyView;
+    
+    //添加编辑框的左右视图
+    textFiled.leftViewMode = UITextFieldViewModeWhileEditing;
+    UIView *leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
+    leftView.backgroundColor = [UIColor grayColor];
+    textFiled.leftView = leftView;
+    
+    //编辑框的代理方法
+    textFiled.delegate = self;
+}
+
+
+
+
+
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [self.view endEditing:YES];
 }
 
 //使用来更新View的约束,他有一个常见的使用场景批量更新约束
